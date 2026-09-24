@@ -387,3 +387,15 @@ p { color: var(--muted); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+.founder-photo {
+  overflow: hidden;
+}
+
+.founder-photo img {
+  width: 100%;
+  max-width: 400px;
+  height: 450px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 16px;
+}
