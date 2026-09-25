@@ -399,3 +399,174 @@ p { color: var(--muted); }
   display: block;
   margin-bottom: 16px;
 }
+
+.contact-layout {
+  align-items: start;
+}
+
+.contact-aside {
+  padding-top: 10px;
+}
+
+.contact-aside h2 {
+  font-size: 38px;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  letter-spacing: -0.03em;
+}
+
+.contact-aside > p {
+  max-width: 480px;
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.contact-options {
+  display: grid;
+  gap: 18px;
+  margin: 28px 0;
+}
+
+.contact-option {
+  padding-left: 18px;
+  border-left: 2px solid var(--line);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.contact-option:hover {
+  border-left-color: var(--green);
+  transform: translateX(4px);
+}
+
+.contact-option strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.contact-option p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.contact-help {
+  margin-top: 30px;
+}
+
+.contact-help h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.contact-help p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.contact-form-panel {
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.contact-form-panel:hover {
+  box-shadow: 0 18px 45px rgba(41, 61, 46, 0.08);
+}
+
+.contact-form-panel h2 {
+  font-size: 30px;
+  letter-spacing: -0.03em;
+}
+
+.contact-form-panel input,
+.contact-form-panel select,
+.contact-form-panel textarea {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.contact-form-panel input:hover,
+.contact-form-panel select:hover,
+.contact-form-panel textarea:hover {
+  border-color: var(--green);
+}
+
+.contact-form-panel input:focus,
+.contact-form-panel select:focus,
+.contact-form-panel textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(100, 126, 69, 0.12);
+}
+
+.contact-form-panel textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.contact-form-panel .button {
+  min-width: 190px;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.contact-form-panel .button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(41, 61, 46, 0.15);
+}
+
+.contact-form-panel .privacy-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+/* Contact page mobile improvements */
+
+@media (max-width: 640px) {
+  .contact-layout {
+    gap: 30px;
+  }
+
+  .contact-aside h2 {
+    font-size: 32px;
+  }
+
+  .contact-form-panel {
+    padding: 24px 20px;
+  }
+
+  .contact-form-panel h2 {
+    font-size: 26px;
+  }
+
+  .contact-form-panel .button {
+    width: 100%;
+  }
+}
+
+html {
+  scroll-padding-top: 90px;
+}
+
+body {
+  padding-top: 0;
+}
+
+.site-header {
+  position: relative;
+  z-index: 100;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--cream);
+}
