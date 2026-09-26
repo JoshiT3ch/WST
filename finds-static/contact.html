@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Try the Finds contact form. This frontend-only demonstration validates fields without sending or storing your message.">
+    <meta
+  name="description"
+  content="Contact Finds with questions about buying, selling, listings, feedback, and the Finds experience."
+>
     <meta name="theme-color" content="#293d2e">
     <title>Contact | Finds</title>
     <link rel="icon" href="images/logo/mark.svg" type="image/svg+xml">
@@ -28,29 +31,79 @@
     </header>
     <main id="main">
       <section class="page-intro container">
-        <span class="eyebrow">LET’S START A CONVERSATION</span>
-        <h1>Good things begin<br><span>with a hello.</span></h1>
-        <p>A question, an idea, or a little feedback?<br>Take our contact form for a test run.</p>
-      </section>
+  <span class="eyebrow">LET’S START A CONVERSATION</span>
+  <h1>Good things begin<br><span>with a hello.</span></h1>
+  <p>
+    Have a question about Finds, need help with a listing,
+    or simply want to share an idea?
+  </p>
+</section>
       <section class="container contact-layout">
         <aside class="contact-aside">
-          <span class="icon-tile"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11a9 9 0 0 1-9 9H3l2-5a9 9 0 1 1 16-4Z"/><path d="M8 10h8m-8 4h5"/></svg></span>
-          <h2>We’re all ears.</h2>
-          <p>Finds is still taking shape. This page shows how reaching out could work in a future version.</p>
-          <div class="contact-help">
-            <h3>Looking for a quick answer?</h3>
-            <p>Our FAQs cover the project, sample listings, and what you can try.</p>
-            <a class="text-link" href="faqs.html">Visit the FAQs <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
-          </div>
-          <div class="demo-panel">
-            <strong>A friendly heads-up</strong>
-            <p>This is a demo form. Nothing you enter is sent or stored. Use sample details to try it out.</p>
-          </div>
-        </aside>
+  <span class="icon-tile">
+    <svg class="icon" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="1.6"
+      stroke-linecap="round" stroke-linejoin="round"
+      aria-hidden="true">
+      <path d="M21 11a9 9 0 0 1-9 9H3l2-5a9 9 0 1 1 16-4Z"/>
+      <path d="M8 10h8m-8 4h5"/>
+    </svg>
+  </span>
+
+  <h2>We’re all ears.</h2>
+
+  <p>
+    Have a question or need a little help?
+    Reach out to the Finds team and let us know how we can help.
+  </p>
+
+  <div class="contact-options">
+    <div class="contact-option">
+      <strong>Buying & selling</strong>
+      <p>Questions about purchases, listings, or selling on Finds?</p>
+    </div>
+
+    <div class="contact-option">
+      <strong>Share your feedback</strong>
+      <p>Have an idea that could make the Finds experience better?</p>
+    </div>
+  </div>
+
+  <div class="contact-help">
+    <h3>Looking for a quick answer?</h3>
+
+    <p>
+      Find answers to common questions about buying,
+      selling, listings, and the Finds experience.
+    </p>
+
+    <a class="text-link" href="faqs.html">
+      Visit the FAQs
+      <svg class="icon" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true">
+        <path d="M4 12h15m-6-6 6 6-6 6"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="demo-panel">
+    <strong>A friendly heads-up</strong>
+
+    <p>
+      This is a frontend demonstration.
+      Nothing you enter is sent or stored.
+      Use sample details to try the form.
+    </p>
+  </div>
+</aside>
         <div class="contact-form-panel">
           <form id="contact-form" aria-describedby="form-note">
-            <h2>Say hello</h2>
-            <p id="form-note">Fields marked * are required. This form is for demonstration only.</p>
+            <h2>How can we help?</h2>
+<p id="form-note">
+  Tell us a little about what you need. Fields marked * are required.
+</p>
             <div class="form-row">
               <div class="field">
                 <label for="name">Your name *</label>
@@ -64,19 +117,38 @@
             <div class="field">
               <label for="topic">What’s on your mind? *</label>
               <select id="topic" name="topic" required>
-                <option value="">Choose a topic</option>
-                <option value="general">General question</option>
-                <option value="feedback">Feedback on Finds</option>
-                <option value="marketplace">Buying and selling</option>
-                <option value="other">Something else</option>
-              </select>
+  <option value="">Choose a topic</option>
+  <option value="buying">Buying on Finds</option>
+  <option value="selling">Selling on Finds</option>
+  <option value="listing">Listing help</option>
+  <option value="account">Account support</option>
+  <option value="feedback">Feedback on Finds</option>
+  <option value="general">General question</option>
+  <option value="other">Something else</option>
+</select>
             </div>
             <div class="field">
               <label for="message">Your message *</label>
-              <textarea id="message" name="message" rows="5" placeholder="Tell us a little more…" required minlength="10" maxlength="2000"></textarea>
+<textarea
+  id="message"
+  name="message"
+  rows="5"
+  placeholder="Tell us how we can help…"
+  required
+  minlength="10"
+  maxlength="2000"
+></textarea>
               <span class="field-help">At least 10 characters.</span>
             </div>
-            <button class="button" type="submit" disabled>Try sending a message <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
+            <button class="button" type="submit" disabled>
+  Send message
+  <svg class="icon" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="1.6"
+    stroke-linecap="round" stroke-linejoin="round"
+    aria-hidden="true">
+    <path d="M4 12h15m-6-6 6 6-6 6"/>
+  </svg>
+</button>
             <noscript><p>Enable JavaScript to try this demo. No message will be sent.</p></noscript>
             <p class="privacy-note">Demo only · No information leaves this page.</p>
           </form>

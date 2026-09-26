@@ -47,3 +47,5 @@ Replace illustrations under `images/products/` with your own photos, and update 
 4. Only show a real success message after that server confirms delivery.
 
 The existing Finds website at https://finds-brown.vercel.app/ inspired the sage palette, second-hand fashion direction, and bold typography. This is a new static implementation, not a copy of its application code.
+
+
