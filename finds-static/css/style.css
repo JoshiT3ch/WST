@@ -1,4 +1,4 @@
-/* Finds: one shared stylesheet. Edit these variables to change the theme. */
+git status/* Finds: one shared stylesheet. Edit these variables to change the theme. */
 :root {
   --ink: #26382b;
   --muted: #687065;
@@ -129,7 +129,7 @@ p { color: var(--muted); }
 .cta-section { display: flex; justify-content: space-between; gap: 50px; align-items: center; padding: 54px 64px; background: var(--ink); color: #f7f7e9; margin-bottom: 85px; border-radius: 8px; }
 .cta-section .eyebrow { color: #c2cdb0; margin-bottom: 17px; }
 .cta-section h2 { font-size: clamp(32px, 3.5vw, 48px); margin-bottom: 18px; }
-.cta-section p { color: #c4cbbd; font-size: 13px; margin-bottom: 26px; }
+.cta-section p { color: #c4cbbd; font-size: 13px; margin-bottom: 26px; }git status
 .cta-art { position: relative; width: 260px; font-size: 62px; font-weight: 500; line-height: .95; letter-spacing: -.07em; color: #dce5c4; transform: rotate(-8deg); }
 .cta-art em { font-family: var(--serif); font-weight: 400; }
 .cta-art img { position: absolute; right: 0; top: 25%; width: 67px; filter: brightness(0) invert(90%) sepia(10%); }
