@@ -141,7 +141,6 @@ p { color: var(--muted); }
 .footer-grid > div > a:not(.wordmark) { display: block; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
 .footer-grid a:hover { text-decoration: underline; }
 .footer-note > .icon { margin-bottom: 15px; width: 29px; height: 29px; }
-.footer-bottom { border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; padding-block: 21px; color: var(--muted); font-size: 10px; }
 .page-intro { text-align: center; padding-block: 76px 50px; }
 .page-intro h1 { font-size: clamp(42px, 5vw, 67px); margin-bottom: 25px; }
 .page-intro p { line-height: 1.9; margin-bottom: 0; }
@@ -277,7 +276,6 @@ p { color: var(--muted); }
   .cta-art img { width: 45px; }
   .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; }
   .footer-note { display: none; }
-  .footer-bottom { flex-wrap: wrap; }
   .contact-layout { gap: 35px; grid-template-columns: .75fr 1.25fr; }
   .contact-form-panel { padding: 25px; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
@@ -343,7 +341,6 @@ p { color: var(--muted); }
   .footer-grid > div:first-child p br { display: none; }
   .footer-grid .wordmark { margin-bottom: 12px; }
   .footer-grid h2 { margin-bottom: 15px; }
-  .footer-bottom { flex-direction: column; gap: 8px; font-size: 9px; }
   .page-intro { padding-block: 45px 36px; }
   .page-intro h1 { font-size: 43px; }
   .page-intro p { font-size: 13px; }

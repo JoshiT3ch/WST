@@ -7,8 +7,6 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   if (link.getAttribute('href') === currentPage) link.setAttribute('aria-current', 'page');
   else link.removeAttribute('aria-current');
 });
-document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
-
 // The navigation stays usable without JavaScript; enhancement enables its toggle.
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#primary-nav');
