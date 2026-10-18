@@ -1,0 +1,21 @@
+{
+  "name": "finds",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Finds website and Node.js API",
+  "type": "module",
+  "engines": {
+    "node": ">=22.9.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "dev": "node --env-file-if-exists=.env --watch server/index.js",
+    "test": "node --test",
+    "check": "node --check server/app.js && node --check server/index.js && node --check finds-static/js/main.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0"
+  }
+}

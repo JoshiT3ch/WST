@@ -16,18 +16,117 @@
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <div class="container nav-wrap">
-        <a class="wordmark" href="index.html" aria-label="Finds home">finds<span class="logo-dot">.</span></a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span></span><span></span></button>
-        <nav id="primary-nav" class="nav-links" aria-label="Main navigation">
-          <a href="index.html">Home</a>
-          <a href="how-it-works.html">How it works</a>
-          <a href="about.html">About</a>
-          <a href="contact.html" aria-current="page">Contact</a>
-          <a href="faqs.html">FAQs</a>
-          <a class="button button-small nav-cta" href="index.html#featured">Explore finds <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
-        </nav>
+      <div class="container marketplace-top">
+        <a class="marketplace-logo" href="index.html" aria-label="Finds home">FINDS</a>
+        <form class="header-search" role="search" action="index.html#featured" method="get">
+          <label class="search-kind" for="header-search">Listings</label>
+          <input id="header-search" type="search" name="q" placeholder="What are you looking for?" aria-label="Search Finds listings" maxlength="100">
+          <button type="submit" aria-label="Search"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></button>
+        </form>
+        <div class="header-actions">
+          <a href="contact.html#contact-form">Sell Now</a>
+          <a class="header-about" href="about.html">About Finds</a>
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open categories"><span></span><span></span></button>
       </div>
+      <nav id="primary-nav" class="category-nav" aria-label="Shop categories">
+        <div class="container category-list">
+          <details class="category-menu">
+            <summary>Women</summary>
+            <div class="mega-menu" id="menu-women">
+              <div class="container mega-menu-grid">
+                <div class="mega-menu-links" aria-label="Women categories">
+                  <ul>
+                    <li><a href="index.html#featured">All Women</a></li>
+                    <li><a href="index.html?q=Accessories#featured">Accessories</a></li>
+                    <li><a href="index.html?q=bag#featured">Bags</a></li>
+                    <li><a href="index.html?q=Dresses#featured">Dresses</a></li>
+                    <li><a href="index.html?q=Intimates+%26+Sleepwear#featured">Intimates &amp; Sleepwear</a></li>
+                    <li><a href="index.html?q=jacket#featured">Jackets &amp; Coats</a></li>
+                    <li><a href="index.html?q=Jeans#featured">Jeans</a></li>
+                    <li><a href="index.html?q=Jewelry#featured">Jewelry</a></li>
+                    <li><a href="index.html?q=Makeup#featured">Makeup</a></li>
+                    <li><a href="index.html?q=Pants+%26+Jumpsuits#featured">Pants &amp; Jumpsuits</a></li>
+                  </ul>
+                  <ul>
+                    <li><a href="index.html?q=Shoes#featured">Shoes</a></li>
+                    <li><a href="index.html?q=Shorts#featured">Shorts</a></li>
+                    <li><a href="index.html?q=Skirts#featured">Skirts</a></li>
+                    <li><a href="index.html?q=Sweaters#featured">Sweaters</a></li>
+                    <li><a href="index.html?q=Swim#featured">Swim</a></li>
+                    <li><a href="index.html?q=tee#featured">Tops</a></li>
+                    <li><a href="index.html?q=Skincare#featured">Skincare</a></li>
+                    <li><a href="index.html?q=Hair#featured">Hair</a></li>
+                    <li><a href="index.html?q=Bath+%26+Body#featured">Bath &amp; Body</a></li>
+                    <li><a href="index.html?q=Other#featured">Other</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-features">
+                  <a class="menu-feature" href="index.html?q=denim#featured"><img src="images/products/jacket.svg" alt="Vintage denim jacket" width="360" height="400"><span>Denim Favorites</span></a>
+                  <a class="menu-feature" href="index.html?q=everyday#featured"><img src="images/products/shirt.svg" alt="Everyday tee" width="360" height="400"><span>Everyday Essentials</span></a>
+                  <a class="menu-feature" href="index.html?q=bag#featured"><img src="images/products/bag.svg" alt="Canvas tote bag" width="360" height="400"><span>Carry It Forward</span></a>
+                </div>
+              </div>
+            </div>
+          </details>
+          <details class="category-menu">
+            <summary>Men</summary>
+            <div class="mega-menu" id="menu-men">
+              <div class="container mega-menu-grid">
+                <div class="mega-menu-links" aria-label="Men categories">
+                  <ul>
+                    <li><a href="index.html#featured">All Men</a></li>
+                    <li><a href="index.html?q=Accessories#featured">Accessories</a></li>
+                    <li><a href="index.html?q=bag#featured">Bags</a></li>
+                    <li><a href="index.html?q=jacket#featured">Jackets &amp; Coats</a></li>
+                    <li><a href="index.html?q=Jeans#featured">Jeans</a></li>
+                    <li><a href="index.html?q=Pants#featured">Pants</a></li>
+                  </ul>
+                  <ul>
+                    <li><a href="index.html?q=tee#featured">Shirts</a></li>
+                    <li><a href="index.html?q=Shoes#featured">Shoes</a></li>
+                    <li><a href="index.html?q=Shorts#featured">Shorts</a></li>
+                    <li><a href="index.html?q=Suits#featured">Suits</a></li>
+                    <li><a href="index.html?q=Sweaters#featured">Sweaters</a></li>
+                    <li><a href="index.html?q=tee#featured">Tops</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-features">
+                  <a class="menu-feature" href="index.html?q=denim#featured"><img src="images/products/jacket.svg" alt="Vintage denim jacket" width="360" height="400"><span>Denim Favorites</span></a>
+                  <a class="menu-feature" href="index.html?q=everyday#featured"><img src="images/products/shirt.svg" alt="Everyday tee" width="360" height="400"><span>Everyday Essentials</span></a>
+                  <a class="menu-feature" href="index.html?q=bag#featured"><img src="images/products/bag.svg" alt="Canvas tote bag" width="360" height="400"><span>Carry It Forward</span></a>
+                </div>
+              </div>
+            </div>
+          </details>
+          <details class="category-menu">
+            <summary>Kids</summary>
+            <div class="mega-menu" id="menu-kids">
+              <div class="container mega-menu-grid">
+                <div class="mega-menu-links" aria-label="Kids categories">
+                  <ul>
+                    <li><a href="index.html#featured">All Kids</a></li>
+                    <li><a href="index.html?q=Accessories#featured">Accessories</a></li>
+                    <li><a href="index.html?q=bag#featured">Bags</a></li>
+                    <li><a href="index.html?q=Clothing#featured">Clothing</a></li>
+                  </ul>
+                  <ul>
+                    <li><a href="index.html?q=jacket#featured">Jackets &amp; Coats</a></li>
+                    <li><a href="index.html?q=Shoes#featured">Shoes</a></li>
+                    <li><a href="index.html?q=Toys#featured">Toys</a></li>
+                    <li><a href="index.html?q=Baby+Essentials#featured">Baby Essentials</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-features">
+                  <a class="menu-feature" href="index.html?q=denim#featured"><img src="images/products/jacket.svg" alt="Vintage denim jacket" width="360" height="400"><span>Denim Favorites</span></a>
+                  <a class="menu-feature" href="index.html?q=everyday#featured"><img src="images/products/shirt.svg" alt="Everyday tee" width="360" height="400"><span>Everyday Essentials</span></a>
+                  <a class="menu-feature" href="index.html?q=bag#featured"><img src="images/products/bag.svg" alt="Canvas tote bag" width="360" height="400"><span>Carry It Forward</span></a>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </nav>
     </header>
     <main id="main">
       <section class="page-intro container">
@@ -92,9 +191,7 @@
     <strong>A friendly heads-up</strong>
 
     <p>
-      This is a frontend demonstration.
-      Nothing you enter is sent or stored.
-      Use sample details to try the form.
+      Your message and contact details are saved by Finds so the team can review them.
     </p>
   </div>
 </aside>
@@ -149,17 +246,18 @@
     <path d="M4 12h15m-6-6 6 6-6 6"/>
   </svg>
 </button>
-            <noscript><p>Enable JavaScript to try this demo. No message will be sent.</p></noscript>
-            <p class="privacy-note">Demo only · No information leaves this page.</p>
+            <p id="form-error" role="alert" tabindex="-1" hidden></p>
+            <noscript><p>Enable JavaScript to send your message.</p></noscript>
+            <p class="privacy-note">Your name, email, topic, and message are saved by Finds.</p>
           </form>
           <section id="form-success" class="form-success" tabindex="-1" aria-labelledby="success-title" hidden>
             <span class="success-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>
-            <span class="eyebrow">DEMO COMPLETE</span>
-            <h2 id="success-title">That’s how hello happens.</h2>
-            <p>Your form passed validation. In a full version, this is where your message would be sent.</p>
+            <span class="eyebrow">MESSAGE RECEIVED</span>
+            <h2 id="success-title">Thanks for saying hello.</h2>
+            <p>Your message has been received and saved for the Finds team.</p>
             <div class="demo-panel">
-              <strong>No message was sent.</strong>
-              <p>Your details haven’t been stored or shared.</p>
+              <strong>We have your message.</strong>
+              <p>This confirmation means your message was saved. An automatic email reply is not sent.</p>
             </div>
             <button id="try-again" class="button" type="button">Try another message <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
           </section>
@@ -167,25 +265,31 @@
       </section>
     </main>
     <footer class="site-footer">
-      <div class="container footer-grid">
-        <div>
-          <a class="wordmark" href="index.html" aria-label="Finds home">finds<span class="logo-dot">.</span></a>
-          <p>Good clothes. New stories.<br>A little less new. A lot more you.</p>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-intro">
+            <h2 class="footer-headline">Good clothes<br>deserve<br><em>another chapter.</em></h2>
+            <p>Discover pre-loved pieces, give your wardrobe a fresh perspective, and pass great style forward.</p>
+          </div>
+          <nav class="footer-links" aria-label="Browse">
+            <h2>Browse</h2>
+            <a href="index.html#featured">All Items</a>
+            <a href="index.html#categories">Categories</a>
+          </nav>
+          <nav class="footer-links" aria-label="Sell">
+            <h2>Sell</h2>
+            <a href="contact.html#contact-form">List an Item</a>
+            <a href="how-it-works.html">How it Works</a>
+          </nav>
+          <nav class="footer-links" aria-label="About">
+            <h2>About</h2>
+            <a href="about.html">About Finds</a>
+            <a href="contact.html">Contact</a>
+            <a href="faqs.html">FAQs</a>
+          </nav>
         </div>
-        <div>
-          <h2>Explore</h2>
-          <a href="index.html#featured">Featured finds</a>
-          <a href="how-it-works.html">How it works</a>
-        </div>
-        <div>
-          <h2>Get to know us</h2>
-          <a href="about.html">About Finds</a>
-          <a href="contact.html">Contact us</a>
-          <a href="faqs.html">FAQs</a>
-        </div>
-        <div class="footer-note">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 3C8 1 2 8 6 15c7 5 15-1 14-12ZM4 21 15 10"/></svg>
-          <p>Made for second chances.<br>And first-rate finds.</p>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Finds. All rights reserved.</p>
         </div>
       </div>
     </footer>
