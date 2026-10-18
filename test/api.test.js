@@ -23,7 +23,7 @@ async function fixture(t, options = {}) {
 
 test('serves all website pages and assets, without exposing backend files', async t => {
   const { request } = await fixture(t);
-  for (const path of ['/', '/about.html', '/contact.html', '/faqs.html', '/how-it-works.html', '/css/style.css', '/js/main.js', '/images/products/jacket.svg']) {
+  for (const path of ['/', '/about.html', '/contact.html', '/faqs.html', '/how-it-works.html', '/css/style.css', '/js/app.js', '/images/products/jacket.svg']) {
     const response = await request(path);
     assert.equal(response.status, 200, path);
     assert.equal(response.headers.get('x-content-type-options'), 'nosniff');

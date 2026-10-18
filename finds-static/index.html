@@ -8,7 +8,7 @@
     <title>Good things, found again | Finds</title>
     <link rel="icon" href="images/logo/mark.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/main.js" defer></script>
+    <script type="module" src="js/app.js"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -174,103 +174,11 @@
           </div>
           <p>Consider this your little corner<br>of second-hand serendipity.</p>
         </div>
-        <div class="filter-row">
-          <div class="filters" id="categories" role="group" aria-label="Filter featured finds">
-            <button class="filter active" type="button" data-filter="All" aria-pressed="true">All finds</button>
-            <button class="filter" type="button" data-filter="Woman" aria-pressed="false">Woman</button>
-            <button class="filter" type="button" data-filter="Men" aria-pressed="false">Men</button>
-            <button class="filter" type="button" data-filter="Kids" aria-pressed="false">Kids</button>
-          </div>
+        <div id="catalogue-root">
+          <p>Loading finds…</p>
+          <noscript><p>Enable JavaScript to browse finds and use the category buttons.</p></noscript>
         </div>
-        <p id="products-status" role="status" hidden></p>
-        <button class="button" id="retry-products" type="button" hidden>Try loading again</button>
-        <noscript><p>Enable JavaScript to load the current finds and use search.</p></noscript>
-        <div class="product-grid">
-          <article class="product-card" data-category="Clothing" data-audience="Woman Men">
-            <div class="product-image">
-              <img src="images/products/jacket.svg" alt="Illustration of vintage denim jacket" width="360" height="400" loading="lazy">
-              <span class="product-tag">Like new</span>
-              <button class="save-button" type="button" aria-label="Save vintage denim jacket" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
-              <button class="quick-view" type="button" data-product="jacket" aria-label="View vintage denim jacket">Take a closer look <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
-            </div>
-            <div class="product-info">
-              <span class="product-category">Clothing</span>
-              <div class="product-title-row">
-                <h3><button class="product-link" type="button" data-product="jacket">Vintage denim jacket</button></h3>
-                <strong>₱650</strong>
-              </div>
-              <p>Medium · Like new</p>
-            </div>
-          </article>
-          <article class="product-card" data-category="Clothing" data-audience="Woman Men">
-            <div class="product-image">
-              <img src="images/products/shirt.svg" alt="Illustration of the everyday tee" width="360" height="400" loading="lazy">
-              <span class="product-tag">Good</span>
-              <button class="save-button" type="button" aria-label="Save the everyday tee" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
-              <button class="quick-view" type="button" data-product="shirt" aria-label="View the everyday tee">Take a closer look <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
-            </div>
-            <div class="product-info">
-              <span class="product-category">Clothing</span>
-              <div class="product-title-row">
-                <h3><button class="product-link" type="button" data-product="shirt">The everyday tee</button></h3>
-                <strong>₱250</strong>
-              </div>
-              <p>Medium · Good</p>
-            </div>
-          </article>
-          <article class="product-card" data-category="Accessories" data-audience="Woman Men">
-            <div class="product-image">
-              <img src="images/products/bag.svg" alt="Illustration of everywhere canvas tote" width="360" height="400" loading="lazy">
-              <span class="product-tag">Like new</span>
-              <button class="save-button" type="button" aria-label="Save everywhere canvas tote" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
-              <button class="quick-view" type="button" data-product="bag" aria-label="View everywhere canvas tote">Take a closer look <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
-            </div>
-            <div class="product-info">
-              <span class="product-category">Accessories</span>
-              <div class="product-title-row">
-                <h3><button class="product-link" type="button" data-product="bag">Everywhere canvas tote</button></h3>
-                <strong>₱350</strong>
-              </div>
-              <p>One size · Like new</p>
-            </div>
-          </article>
-          <article class="product-card" data-category="Shoes" data-audience="Woman Men">
-            <div class="product-image">
-              <img src="images/products/sneakers.svg" alt="Illustration of weekend sneakers" width="360" height="400" loading="lazy">
-              <span class="product-tag">Good</span>
-              <button class="save-button" type="button" aria-label="Save weekend sneakers" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
-              <button class="quick-view" type="button" data-product="sneakers" aria-label="View weekend sneakers">Take a closer look <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
-            </div>
-            <div class="product-info">
-              <span class="product-category">Shoes</span>
-              <div class="product-title-row">
-                <h3><button class="product-link" type="button" data-product="sneakers">Weekend sneakers</button></h3>
-                <strong>₱850</strong>
-              </div>
-              <p>EU 38 · Good</p>
-            </div>
-          </article>
-        </div>
-        <p class="search-empty" id="search-empty" role="status" hidden>No finds match your search. Try another word or <a href="index.html#featured">browse all finds</a>.</p>
       </section>
-      <dialog id="product-dialog" class="product-dialog" aria-labelledby="dialog-title">
-        <button class="dialog-close" type="button" aria-label="Close item details">×</button>
-        <div class="dialog-grid">
-          <img id="dialog-image" src="images/products/jacket.svg" alt="" width="360" height="400">
-          <div class="dialog-copy">
-            <span class="eyebrow">A SAMPLE FIND</span>
-            <h2 id="dialog-title">Item details</h2>
-            <p id="dialog-price" class="dialog-price"></p>
-            <p id="dialog-meta"></p>
-            <p id="dialog-description"></p>
-            <div class="demo-panel">
-              <strong>Just a little preview.</strong>
-              <p>This is a sample listing. Purchasing and contacting a seller will be part of a future version.</p>
-            </div>
-            <a class="button" href="how-it-works.html">See how Finds works <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
-          </div>
-        </div>
-      </dialog>
     </main>
     <footer class="site-footer">
       <div class="container">
@@ -301,6 +209,6 @@
         </div>
       </div>
     </footer>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div id="toast-root"></div>
   </body>
 </html>

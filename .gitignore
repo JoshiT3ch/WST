@@ -5,3 +5,5 @@ node_modules/
 .data/
 coverage/
 *.log
+finds-static/js/app.js
+finds-static/js/app.js.map

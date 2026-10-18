@@ -29,9 +29,11 @@ npm install
 npm start
 ```
 
-Open [Finds locally](http://localhost:3000). Use `npm run dev` to restart the backend automatically when server code changes. Refresh the browser after frontend changes. Stop the server with Ctrl+C. Open the site through Node.js, since double-clicking HTML files or using Live Server does not provide the API.
+Open [Finds locally](http://localhost:3000). `npm start` builds the React frontend before starting the server. Use `npm run dev` to rebuild React components and restart the backend automatically when their source files change; refresh the browser to see frontend changes. Stop the server with Ctrl+C. Open the site through Node.js, since double-clicking HTML files or using Live Server does not provide the API.
 
-The Node.js/Express backend serves all five pages, product search, Woman/Men/Kids filters, item details, and contact submissions. Listings come from `server/data/products.json`. Contact messages are saved in `.data/messages.jsonl`, outside the public website and excluded from Git. Messages survive server restarts. There is no public endpoint to read messages; review the local file as the project owner.
+React components control the header search, mobile menu, Woman/Men/Kids filters, save buttons, product details, and contact form. The Node.js/Express backend serves all five pages and their APIs. Listings come from `server/data/products.json`. Contact messages are saved in `.data/messages.jsonl`, outside the public website and excluded from Git. Messages survive server restarts. There is no public endpoint to read messages; review the local file as the project owner.
+
+React source lives in `frontend/`. `npm run build` bundles it with esbuild into `finds-static/js/app.js`; this generated file is ignored by Git. Install development dependencies when building (plain `npm install` includes them). HTML page content and CSS remain in `finds-static/`.
 
 Optional configuration: copy `.env.example` to `.env` and change `PORT`, `HOST`, or `DATA_DIR`. The defaults work without an environment file. Keep `DATA_DIR` outside `finds-static`.
 
@@ -51,6 +53,6 @@ Contact requests use JSON fields `name` (1–80 characters), `email` (valid addr
 
 ## Checks and current scope
 
-Run `npm run check` for syntax checks and `npm test` for API integration tests. Tests use temporary storage and cover filtering, validation, persistence, concurrent writes, rate limiting, storage failures, and keeping backend files private.
+Run `npm run check` for server syntax checks and a production React build. `npm test` builds React and runs API integration tests, including checking that the browser bundle is served. Tests use temporary storage and cover filtering, validation, persistence, concurrent writes, rate limiting, storage failures, and keeping backend files private.
 
 The backend is intended for local, single-process development with a writable disk. JSON storage and in-memory request limits need replacing with a shared database and shared limits before running multiple instances or deploying on a host with temporary storage. The server binds to `127.0.0.1` by default. Accounts, creating listings, payments, seller chat, and email delivery are future work; favorites remain temporary. More frontend details are in the [website README](finds-static/README.md).

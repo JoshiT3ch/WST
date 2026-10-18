@@ -8,14 +8,22 @@
     "node": ">=22.9.0"
   },
   "scripts": {
+    "build": "esbuild frontend/main.jsx --bundle --format=esm --jsx=automatic --minify --outfile=finds-static/js/app.js",
+    "prestart": "npm run build",
     "start": "node --env-file-if-exists=.env server/index.js",
-    "dev": "node --env-file-if-exists=.env --watch server/index.js",
+    "dev": "node --env-file-if-exists=.env scripts/dev.js",
+    "pretest": "npm run build",
     "test": "node --test",
-    "check": "node --check server/app.js && node --check server/index.js && node --check finds-static/js/main.js"
+    "check": "node --check server/app.js && node --check server/index.js && node --check scripts/dev.js && npm run build"
   },
   "dependencies": {
     "express": "^5.3.0",
     "express-rate-limit": "^8.7.1",
-    "helmet": "^8.3.0"
+    "helmet": "^8.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

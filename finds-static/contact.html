@@ -11,7 +11,7 @@
     <title>Contact | Finds</title>
     <link rel="icon" href="images/logo/mark.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/main.js" defer></script>
+    <script type="module" src="js/app.js"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -195,72 +195,9 @@
     </p>
   </div>
 </aside>
-        <div class="contact-form-panel">
-          <form id="contact-form" aria-describedby="form-note">
-            <h2>How can we help?</h2>
-<p id="form-note">
-  Tell us a little about what you need. Fields marked * are required.
-</p>
-            <div class="form-row">
-              <div class="field">
-                <label for="name">Your name *</label>
-                <input id="name" name="name" autocomplete="name" placeholder="e.g. Alex Santos" required maxlength="80">
-              </div>
-              <div class="field">
-                <label for="email">Email address *</label>
-                <input id="email" name="email" type="email" autocomplete="email" placeholder="alex@example.com" required maxlength="120">
-              </div>
-            </div>
-            <div class="field">
-              <label for="topic">What’s on your mind? *</label>
-              <select id="topic" name="topic" required>
-  <option value="">Choose a topic</option>
-  <option value="buying">Buying on Finds</option>
-  <option value="selling">Selling on Finds</option>
-  <option value="listing">Listing help</option>
-  <option value="account">Account support</option>
-  <option value="feedback">Feedback on Finds</option>
-  <option value="general">General question</option>
-  <option value="other">Something else</option>
-</select>
-            </div>
-            <div class="field">
-              <label for="message">Your message *</label>
-<textarea
-  id="message"
-  name="message"
-  rows="5"
-  placeholder="Tell us how we can help…"
-  required
-  minlength="10"
-  maxlength="2000"
-></textarea>
-              <span class="field-help">At least 10 characters.</span>
-            </div>
-            <button class="button" type="submit" disabled>
-  Send message
-  <svg class="icon" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" stroke-width="1.6"
-    stroke-linecap="round" stroke-linejoin="round"
-    aria-hidden="true">
-    <path d="M4 12h15m-6-6 6 6-6 6"/>
-  </svg>
-</button>
-            <p id="form-error" role="alert" tabindex="-1" hidden></p>
-            <noscript><p>Enable JavaScript to send your message.</p></noscript>
-            <p class="privacy-note">Your name, email, topic, and message are saved by Finds.</p>
-          </form>
-          <section id="form-success" class="form-success" tabindex="-1" aria-labelledby="success-title" hidden>
-            <span class="success-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>
-            <span class="eyebrow">MESSAGE RECEIVED</span>
-            <h2 id="success-title">Thanks for saying hello.</h2>
-            <p>Your message has been received and saved for the Finds team.</p>
-            <div class="demo-panel">
-              <strong>We have your message.</strong>
-              <p>This confirmation means your message was saved. An automatic email reply is not sent.</p>
-            </div>
-            <button id="try-again" class="button" type="button">Try another message <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
-          </section>
+        <div class="contact-form-panel" id="contact-root">
+          <p>Loading contact form…</p>
+          <noscript><p>Enable JavaScript to send your message.</p></noscript>
         </div>
       </section>
     </main>
@@ -293,6 +230,6 @@
         </div>
       </div>
     </footer>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div id="toast-root"></div>
   </body>
 </html>
