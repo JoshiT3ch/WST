@@ -89,7 +89,7 @@ export function Header({ query, onQueryChange, onSearch }) {
       <input id="header-search" type="search" name="q" placeholder="What are you looking for?" aria-label="Search Finds listings" maxLength={100} value={query} onChange={event => onQueryChange(event.target.value)} />
       <button type="submit" aria-label="Search"><svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg></button>
     </form>
-    <div className="header-actions"><a href="contact.html#contact-form">Sell Now</a><a className="header-about" href="about.html" aria-current={currentPage === 'about.html' ? 'page' : undefined}>About Finds</a></div>
+    <div className="header-actions"><a href="sell.html">Sell Now</a><a className="header-about" href="about.html" aria-current={currentPage === 'about.html' ? 'page' : undefined}>About Finds</a></div>
     <button ref={menuButton} className="menu-toggle" type="button" aria-expanded={open} aria-controls="primary-nav" aria-label={open ? 'Close categories' : 'Open categories'} onClick={() => setOpen(previous => !previous)}><span /><span /></button>
   </>;
 }
