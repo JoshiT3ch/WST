@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.data/
+coverage/
+*.log
+finds-static/js/app.js
+finds-static/js/app.js.map
+
+# Uploaded test files and local backups
+finds-static/uploads/*
+!finds-static/uploads/.gitkeep
+server/app.js.backup

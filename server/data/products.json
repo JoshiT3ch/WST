@@ -1,0 +1,50 @@
+[
+  {
+    "id": "jacket",
+    "title": "Vintage denim jacket",
+    "category": "Clothing",
+    "audiences": ["Woman", "Men"],
+    "price": 650,
+    "currency": "PHP",
+    "size": "Medium",
+    "condition": "Like new",
+    "description": "A relaxed denim layer with a lived-in blue wash. An easy everyday piece with plenty of stories left to tell.",
+    "image": "images/products/jacket.svg"
+  },
+  {
+    "id": "shirt",
+    "title": "The everyday tee",
+    "category": "Clothing",
+    "audiences": ["Woman", "Men"],
+    "price": 250,
+    "currency": "PHP",
+    "size": "Medium",
+    "condition": "Good",
+    "description": "A soft, off-white graphic tee with a relaxed fit. A simple staple for slow days and everyday adventures.",
+    "image": "images/products/shirt.svg"
+  },
+  {
+    "id": "bag",
+    "title": "Everywhere canvas tote",
+    "category": "Accessories",
+    "audiences": ["Woman", "Men"],
+    "price": 350,
+    "currency": "PHP",
+    "size": "One size",
+    "condition": "Like new",
+    "description": "A roomy olive canvas tote for books, market runs, and everything in between.",
+    "image": "images/products/bag.svg"
+  },
+  {
+    "id": "sneakers",
+    "title": "Weekend sneakers",
+    "category": "Shoes",
+    "audiences": ["Woman", "Men"],
+    "price": 850,
+    "currency": "PHP",
+    "size": "EU 38",
+    "condition": "Good",
+    "description": "Cream and sage low-top sneakers with a classic silhouette. A comfortable finishing touch for a casual outfit.",
+    "image": "images/products/sneakers.svg"
+  }
+]
