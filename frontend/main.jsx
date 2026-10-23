@@ -4,11 +4,13 @@ import { createPortal } from 'react-dom';
 import { Header } from './Header.jsx';
 import { Catalogue } from './Catalogue.jsx';
 import { ContactForm } from './ContactForm.jsx';
+import { SellForm } from './SellForm.jsx';
 
 const targets = {
   header: document.querySelector('.marketplace-top'),
   catalogue: document.querySelector('#catalogue-root'),
   contact: document.querySelector('#contact-root'),
+  sell: document.querySelector('#sell-root'),
   toast: document.querySelector('#toast-root')
 };
 const readQuery = () => (new URLSearchParams(window.location.search).get('q') || '').slice(0, 100);
@@ -47,6 +49,7 @@ function App() {
     {createPortal(<Header query={query} onQueryChange={setQuery} onSearch={search} />, targets.header)}
     {targets.catalogue ? createPortal(<Catalogue query={query} searchRevision={searchRevision} announce={announce} />, targets.catalogue) : null}
     {targets.contact ? createPortal(<ContactForm />, targets.contact) : null}
+    {targets.sell ? createPortal(<SellForm />, targets.sell) : null}
     {createPortal(<div className={`toast${toast ? ' is-visible' : ''}`} role="status" aria-live="polite">{toast?.message}</div>, targets.toast)}
   </>;
 }
