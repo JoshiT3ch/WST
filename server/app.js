@@ -150,16 +150,25 @@ export function createApp({
 
   app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
-  app.get('/api/products', async (req, res, next) => {
-    const { q = '', audience = 'All' } = req.query;
+ app.get('/api/products', async (req, res, next) => {
+  const {
+    q = '',
+    audience = 'All',
+    category = 'All'
+  } = req.query;
 
-    if (typeof q !== 'string' || q.length > 100 ||
-        typeof audience !== 'string' ||
-        !['All', ...audiences].includes(audience)) {
-      return res.status(400).json({
-        error: 'Use a search of at most 100 characters and audience All, Woman, Men, or Kids.'
-      });
-    }
+  if (
+    typeof q !== 'string' ||
+    q.length > 100 ||
+    typeof audience !== 'string' ||
+    !['All', ...audiences].includes(audience) ||
+    typeof category !== 'string' ||
+    !['All', ...productCategories].includes(category)
+  ) {
+    return res.status(400).json({
+      error: 'Use a search of at most 100 characters and valid audience and category filters.'
+    });
+  }
 
     try {
       const allProducts = [...products, ...await listings.list()];
@@ -170,8 +179,11 @@ export function createApp({
           product.size, product.condition, ...(product.audiences || [])
         ].join(' ').toLowerCase();
 
-        return (audience === 'All' || product.audiences.includes(audience)) &&
-          terms.every(term => text.includes(term));
+      return (
+  (audience === 'All' || product.audiences.includes(audience)) &&
+  (category === 'All' || product.category === category) &&
+  terms.every(term => text.includes(term))
+);
       });
 
       res.json({ products: results, total: results.length });
