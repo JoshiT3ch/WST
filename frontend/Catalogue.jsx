@@ -2,7 +2,23 @@ import { useEffect, useRef, useState } from 'react';
 import { requestApi, errorMessage, formatPrice } from './api.js';
 import { ArrowIcon, HeartIcon } from './ui.jsx';
 
-const categories = [['All', 'All finds'], ['Woman', 'Woman'], ['Men', 'Men'], ['Kids', 'Kids']];
+const audiences = [
+  ['All', 'All finds'],
+  ['Woman', 'Woman'],
+  ['Men', 'Men'],
+  ['Kids', 'Kids']
+];
+
+const productCategories = [
+  'All',
+  'Clothing',
+  'Shoes',
+  'Accessories',
+  'Bags',
+  'Home',
+  'Kids',
+  'Other'
+];
 
 function ProductCard({ item, saved, busy, onSave, onView }) {
   const title = item.title.toLowerCase();
@@ -61,7 +77,8 @@ function ProductDialog({ item, opener, onClose }) {
 }
 
 export function Catalogue({ query, searchRevision, announce }) {
-  const [category, setCategory] = useState('All');
+ const [audience, setAudience] = useState('All');
+const [productCategory, setProductCategory] = useState('All');
   const [result, setResult] = useState({ status: 'loading', items: [], error: '' });
   const [retry, setRetry] = useState(0);
   const [saved, setSaved] = useState(() => new Set());
@@ -75,7 +92,11 @@ export function Catalogue({ query, searchRevision, announce }) {
     // A short delay combines rapid search input into one request.
     const timer = setTimeout(async () => {
       try {
-        const params = new URLSearchParams({ q: query.trim(), audience: category });
+        const params = new URLSearchParams({
+  q: query.trim(),
+  audience,
+  category: productCategory
+});
         const data = await requestApi(`/api/products?${params}`, { signal: controller.signal });
         if (!controller.signal.aborted) setResult({ status: 'ready', items: data.products, error: '' });
       } catch (error) {
@@ -86,7 +107,7 @@ export function Catalogue({ query, searchRevision, announce }) {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, category, retry, searchRevision]);
+  }, [query, audience, productCategory, retry, searchRevision]);
 
   useEffect(() => () => detailRequest.current?.abort(), []);
 
@@ -116,15 +137,40 @@ export function Catalogue({ query, searchRevision, announce }) {
     }
   }
 
-  function resetFilters() {
-    setCategory('All');
-    setRetry(previous => previous + 1);
-  }
+function resetFilters() {
+  setAudience('All');
+  setProductCategory('All');
+  setRetry(previous => previous + 1);
+}
 
   return <>
     <div className="filter-row">
       <div className="filters" id="categories" role="group" aria-label="Filter featured finds">
-        {categories.map(([value, label]) => <button key={value} className={`filter${category === value ? ' active' : ''}`} type="button" data-filter={value} aria-pressed={category === value} onClick={() => setCategory(value)}>{label}</button>)}
+        {audiences.map(([value, label]) => (
+  <button
+    key={value}
+    className={`filter${audience === value ? ' active' : ''}`}
+    type="button"
+    data-filter={value}
+    aria-pressed={audience === value}
+    onClick={() => setAudience(value)}
+  >
+    {label}
+  </button>
+))}
+<label>
+  Product category
+  <select
+    value={productCategory}
+    onChange={event => setProductCategory(event.target.value)}
+  >
+    {productCategories.map(value => (
+      <option key={value} value={value}>
+        {value === 'All' ? 'All categories' : value}
+      </option>
+    ))}
+  </select>
+</label>
       </div>
     </div>
     <p id="products-status" role="status" hidden={result.status === 'ready'}>{result.status === 'loading' ? 'Loading finds…' : result.error}</p>

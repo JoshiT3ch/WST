@@ -158,7 +158,45 @@ test('catalogue supports combined search and audience filtering', async t => {
     ['jacket']
   );
 
+
   assert.equal(filtered.total, 1);
+
+  // Category filtering returns only products in the selected category.
+  const clothing = await (
+    await request('/api/products?category=Clothing')
+  ).json();
+
+  assert.deepEqual(
+    clothing.products.map(item => item.id),
+    ['jacket', 'shirt']
+  );
+  assert.equal(clothing.total, 2);
+
+  const shoes = await (
+    await request('/api/products?category=Shoes')
+  ).json();
+
+  assert.deepEqual(
+    shoes.products.map(item => item.id),
+    ['sneakers']
+  );
+
+  // Category, audience, and search filters work together.
+  const combined = await (
+    await request('/api/products?q=denim&audience=Men&category=Clothing')
+  ).json();
+
+  assert.deepEqual(
+    combined.products.map(item => item.id),
+    ['jacket']
+  );
+
+  // A valid category with no matching products returns an empty result.
+  const home = await (
+    await request('/api/products?category=Home')
+  ).json();
+
+  assert.deepEqual(home, { products: [], total: 0 });
 
   assert.deepEqual(
     await (
@@ -174,6 +212,7 @@ test('catalogue supports combined search and audience filtering', async t => {
 
   for (const query of [
     'audience=bad',
+    'category=bad',
     'q=a&q=b',
     'audience=Men&audience=Kids',
     `q=${'a'.repeat(101)}`
