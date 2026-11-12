@@ -139,6 +139,7 @@ test('serves all website pages and assets, without exposing backend files', asyn
   assert.deepEqual(await health.json(), { status: 'ok' });
   assert.equal(health.headers.get('cache-control'), 'no-store');
   assert.equal(health.headers.get('x-powered-by'), null);
+  assert.match(health.headers.get('content-security-policy'), /img-src[^;]*blob:/);
 });
 
 test('catalogue supports combined search and audience filtering', async t => {
@@ -215,6 +216,7 @@ test('catalogue supports combined search and audience filtering', async t => {
     'category=bad',
     'q=a&q=b',
     'audience=Men&audience=Kids',
+    'category=Clothing&category=Shoes',
     `q=${'a'.repeat(101)}`
   ]) {
     assert.equal(
@@ -222,6 +224,19 @@ test('catalogue supports combined search and audience filtering', async t => {
       400
     );
   }
+});
+
+test('audience filters distinguish sample assignments and retain shared items', async t => {
+  const { request } = await fixture(t);
+  const woman = await (await request('/api/products?audience=Woman')).json();
+  const men = await (await request('/api/products?audience=Men')).json();
+  assert.deepEqual(woman.products.map(item => item.id), ['shirt', 'bag', 'sneakers']);
+  assert.deepEqual(men.products.map(item => item.id), ['jacket', 'shirt', 'bag']);
+  for (const [audience, result] of [['Woman', woman], ['Men', men]]) {
+    assert.ok(result.products.every(item => item.audiences.includes(audience)));
+  }
+  const noMatch = await (await request('/api/products?audience=Men&category=Shoes')).json();
+  assert.deepEqual(noMatch, { products: [], total: 0 });
 });
 
 test('product details match the catalogue and unknown items return JSON 404', async t => {
@@ -273,6 +288,10 @@ test('creates validated product listings and returns them in catalogue and detai
   assert.equal(product.currency, 'PHP');
   assert.equal(product.ignored, undefined);
   assert.ok(product.createdAt);
+  const photo = await request(`/${product.image}`);
+  assert.equal(photo.status, 200);
+  assert.equal(photo.headers.get('content-type'), 'image/png');
+  assert.deepEqual(Buffer.from(await photo.arrayBuffer()), testPng);
 
   const catalogue = await (
     await request('/api/products?q=linen')
@@ -293,6 +312,35 @@ test('creates validated product listings and returns them in catalogue and detai
 
   assert.equal(saved.id, product.id);
   assert.equal(saved.ignored, undefined);
+});
+
+test('item names reject numbers and symbols with field feedback and accept accented letters', async t => {
+  const { dataDir, request } = await fixture(t, { productLimit: 100 });
+  for (const title of ['   ', '12345', 'Shirt 123', 'Linen!shirt', '<script>', 'T-shirt', '\u0301']) {
+    const response = await request('/api/products', multipart({ ...listingSample, title }));
+    assert.equal(response.status, 400, title);
+    const result = await response.json();
+    assert.match(result.error, /Finds/);
+    assert.ok(result.fieldErrors.title, title);
+  }
+  await assert.rejects(readFile(join(dataDir, 'products.jsonl')), { code: 'ENOENT' });
+  const valid = await request('/api/products', multipart({ ...listingSample, title: '  Blúsang algodón  ' }));
+  assert.equal(valid.status, 201);
+  assert.equal((await valid.json()).product.title, 'Blúsang algodón');
+});
+
+test('new listings respect the selected audiences alongside category and search filters', async t => {
+  const { request } = await fixture(t);
+  const ids = [];
+  for (const audiences of [['Woman'], ['Men'], ['Woman', 'Men'], ['Kids']]) {
+    const response = await request('/api/products', multipart({ ...listingSample, title: 'Audience test shirt', audiences }));
+    assert.equal(response.status, 201);
+    ids.push((await response.json()).product.id);
+  }
+  for (const [audience, expected] of [['Woman', [ids[0], ids[2]]], ['Men', [ids[1], ids[2]]], ['Kids', [ids[3]]]]) {
+    const result = await (await request(`/api/products?q=audience&category=Clothing&audience=${audience}`)).json();
+    assert.deepEqual(result.products.map(item => item.id), expected);
+  }
 });
 
 test('rejects invalid product listings without saving them', async t => {

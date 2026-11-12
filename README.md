@@ -34,7 +34,9 @@ Open [Finds locally](http://localhost:3000). `npm start` builds the React fronte
 
 React components control the header search, mobile menu, Woman/Men/Kids filters, save buttons, product details, and contact form. The Node.js/Express backend serves the website pages and their APIs. Listings come from `server/data/products.json`. Contact messages are saved in `.data/messages.jsonl`, outside the public website and excluded from Git. Messages survive server restarts. There is no public endpoint to read messages; review the local file as the project owner.
 
-The Sell Now page provides a form for submitting item details. It includes fields for the item name, category, price in PHP, size, condition, intended audience, description, and item photo selection. The form requires the marked fields and at least one audience selection. The photo field is available in the interface, but image upload and storage have not been verified.
+The Sell Now page submits item details and a JPG, PNG, or WebP photo (up to 5 MB). Item names accept letters and spaces only, up to 100 characters, including accented letters. The form and API share validation rules, and the form shows errors beside the relevant fields. Sellers must choose at least one audience; none are preselected. Listings and uploaded photos remain available after restarting the server.
+
+All “Sell Now” and “List an Item” links open the listing page. Product images, names, and quick-view buttons open the full item details. Audience and product-category filters work together with search, and the header’s Women, Men, and Kids links select the relevant audience. Filter selections survive a page reload. In the fictional sample catalogue, the jacket is listed for Men, sneakers for Woman, and the tee and tote for both; shared items correctly appear in both filters.
 
 React source lives in `frontend/`. `npm run build` bundles it with esbuild into `finds-static/js/app.js`; this generated file is ignored by Git. Install development dependencies when building (plain `npm install` includes them). HTML page content and CSS remain in `finds-static/`.
 
@@ -47,7 +49,9 @@ Optional configuration: copy `.env.example` to `.env` and change `PORT`, `HOST`,
 | GET | `/api/health` | Check whether the server is running |
 | GET | `/api/products` | List sample products |
 | GET | `/api/products?q=denim&audience=Men` | Search and filter products |
+| GET | `/api/products?audience=Woman&category=Shoes` | Combine audience and category filters |
 | GET | `/api/products/jacket` | Read one product's details |
+| POST | `/api/products` | Validate and save a listing with a photo (multipart form data) |
 | POST | `/api/contact` | Validate and save a message |
 
 Product list responses contain `{ products, total }`; detail responses contain `{ product }`. `q` is limited to 100 characters. `audience` accepts `All`, `Woman`, `Men`, or `Kids`; the current catalogue has no Kids items.
@@ -58,4 +62,4 @@ Contact requests use JSON fields `name` (1–80 characters), `email` (valid addr
 
 Run `npm run check` for server syntax checks and a production React build. `npm test` builds React and runs API integration tests, including checking that the browser bundle is served. Tests use temporary storage and cover filtering, validation, persistence, concurrent writes, rate limiting, storage failures, and keeping backend files private.
 
-The backend is intended for local, single-process development with a writable disk. JSON storage and in-memory request limits need replacing with a shared database and shared limits before running multiple instances or deploying on a host with temporary storage. The server binds to `127.0.0.1` by default. The Sell Now form is a listing-submission prototype. Seller accounts, image upload and storage, checkout, payments, seller chat, and email delivery are not yet confirmed as implemented. Favorites remain temporary. More frontend details are in the [website README](finds-static/README.md). 
+The backend is intended for local, single-process development with a writable disk. JSON storage and in-memory request limits need replacing with a shared database and shared limits before running multiple instances or deploying on a host with temporary storage. The server binds to `127.0.0.1` by default. The Sell Now form is a listing-submission prototype. Seller accounts, checkout, payments, seller chat, and email delivery are not implemented. Favorites remain temporary. More frontend details are in the [website README](finds-static/README.md).

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { requestApi, errorMessage, formatPrice } from './api.js';
 import { ArrowIcon, HeartIcon } from './ui.jsx';
+import { listingCategories, listingAudiences } from '../shared/listing-validation.js';
 
 const audiences = [
   ['All', 'All finds'],
@@ -9,22 +10,20 @@ const audiences = [
   ['Kids', 'Kids']
 ];
 
-const productCategories = [
-  'All',
-  'Clothing',
-  'Shoes',
-  'Accessories',
-  'Bags',
-  'Home',
-  'Kids',
-  'Other'
-];
+const productCategories = ['All', ...listingCategories];
+
+function readFilter(name, values) {
+  const value = new URLSearchParams(window.location.search).get(name);
+  return values.includes(value) ? value : 'All';
+}
 
 function ProductCard({ item, saved, busy, onSave, onView }) {
   const title = item.title.toLowerCase();
   return <article className="product-card" data-category={item.category} data-audience={item.audiences.join(' ')}>
     <div className="product-image">
-      <img src={item.image} alt={`Illustration of ${title}`} width="360" height="400" loading="lazy" />
+      <button className="product-image-button" type="button" aria-label={`View details for ${title}`} aria-haspopup="dialog" disabled={busy} onClick={event => onView(item.id, event.currentTarget)}>
+        <img src={item.image} alt={item.title} width="360" height="400" loading="lazy" />
+      </button>
       <span className="product-tag">{item.condition}</span>
       <button className="save-button" type="button" aria-label={`${saved ? 'Unsave' : 'Save'} ${title}`} aria-pressed={saved} onClick={() => onSave(item.id)}><HeartIcon /></button>
       <button className="quick-view" type="button" aria-label={`View ${title}`} disabled={busy} onClick={event => onView(item.id, event.currentTarget)}>{busy ? 'Loading details…' : 'Take a closer look'} <ArrowIcon /></button>
@@ -36,6 +35,7 @@ function ProductCard({ item, saved, busy, onSave, onView }) {
         <strong>{formatPrice(item)}</strong>
       </div>
       <p>{item.size} · {item.condition}</p>
+      <p>For: {item.audiences.join(', ')}</p>
     </div>
   </article>;
 }
@@ -62,12 +62,13 @@ function ProductDialog({ item, opener, onClose }) {
   return <dialog ref={dialog} id="product-dialog" className="product-dialog" aria-labelledby="dialog-title" onClose={onClose} onClick={closeOnBackdrop}>
     <button className="dialog-close" type="button" aria-label="Close item details" onClick={() => dialog.current.close()}>×</button>
     <div className="dialog-grid">
-      <img src={item.image} alt={`Illustration of ${item.title.toLowerCase()}`} width="360" height="400" />
+      <img src={item.image} alt={item.title} width="360" height="400" />
       <div className="dialog-copy">
         <span className="eyebrow">A SAMPLE FIND</span>
         <h2 id="dialog-title">{item.title}</h2>
         <p className="dialog-price">{formatPrice(item)}</p>
         <p>{item.size} · {item.condition}</p>
+        <p>For: {item.audiences.join(', ')}</p>
         <p>{item.description}</p>
         <div className="demo-panel"><strong>Just a little preview.</strong><p>This is a sample listing. Purchasing and contacting a seller will be part of a future version.</p></div>
         <a className="button" href="how-it-works.html">See how Finds works <ArrowIcon /></a>
@@ -77,8 +78,8 @@ function ProductDialog({ item, opener, onClose }) {
 }
 
 export function Catalogue({ query, searchRevision, announce }) {
- const [audience, setAudience] = useState('All');
-const [productCategory, setProductCategory] = useState('All');
+  const [audience, setAudience] = useState(() => readFilter('audience', listingAudiences));
+  const [productCategory, setProductCategory] = useState(() => readFilter('category', listingCategories));
   const [result, setResult] = useState({ status: 'loading', items: [], error: '' });
   const [retry, setRetry] = useState(0);
   const [saved, setSaved] = useState(() => new Set());
@@ -92,11 +93,7 @@ const [productCategory, setProductCategory] = useState('All');
     // A short delay combines rapid search input into one request.
     const timer = setTimeout(async () => {
       try {
-        const params = new URLSearchParams({
-  q: query.trim(),
-  audience,
-  category: productCategory
-});
+        const params = new URLSearchParams({ q: query.trim(), audience, category: productCategory });
         const data = await requestApi(`/api/products?${params}`, { signal: controller.signal });
         if (!controller.signal.aborted) setResult({ status: 'ready', items: data.products, error: '' });
       } catch (error) {
@@ -110,6 +107,24 @@ const [productCategory, setProductCategory] = useState('All');
   }, [query, audience, productCategory, retry, searchRevision]);
 
   useEffect(() => () => detailRequest.current?.abort(), []);
+
+  useEffect(() => {
+    function restoreFilters() {
+      setAudience(readFilter('audience', listingAudiences));
+      setProductCategory(readFilter('category', listingCategories));
+    }
+    window.addEventListener('popstate', restoreFilters);
+    return () => window.removeEventListener('popstate', restoreFilters);
+  }, []);
+
+  function changeFilter(name, value) {
+    const url = new URL(window.location.href);
+    if (value === 'All') url.searchParams.delete(name);
+    else url.searchParams.set(name, value);
+    window.history.replaceState(null, '', url);
+    if (name === 'audience') setAudience(value);
+    else setProductCategory(value);
+  }
 
   function toggleSaved(id) {
     const wasSaved = saved.has(id);
@@ -137,42 +152,29 @@ const [productCategory, setProductCategory] = useState('All');
     }
   }
 
-function resetFilters() {
-  setAudience('All');
-  setProductCategory('All');
-  setRetry(previous => previous + 1);
-}
+  function resetFilters() {
+    changeFilter('audience', 'All');
+    changeFilter('category', 'All');
+  }
 
   return <>
     <div className="filter-row">
       <div className="filters" id="categories" role="group" aria-label="Filter featured finds">
         {audiences.map(([value, label]) => (
-  <button
-    key={value}
-    className={`filter${audience === value ? ' active' : ''}`}
-    type="button"
-    data-filter={value}
-    aria-pressed={audience === value}
-    onClick={() => setAudience(value)}
-  >
-    {label}
-  </button>
-))}
-<label>
-  Product category
-  <select
-    value={productCategory}
-    onChange={event => setProductCategory(event.target.value)}
-  >
-    {productCategories.map(value => (
-      <option key={value} value={value}>
-        {value === 'All' ? 'All categories' : value}
-      </option>
-    ))}
-  </select>
-</label>
+          <button key={value} className={`filter${audience === value ? ' active' : ''}`} type="button"
+            data-filter={value} aria-pressed={audience === value} onClick={() => changeFilter('audience', value)}>
+            {label}
+          </button>
+        ))}
+        <label className="category-filter" htmlFor="product-category">Product category</label>
+        <select id="product-category" value={productCategory} onChange={event => changeFilter('category', event.target.value)}>
+          {productCategories.map(value => (
+            <option key={value} value={value}>{value === 'All' ? 'All categories' : value}</option>
+          ))}
+        </select>
       </div>
     </div>
+    <p className="catalogue-note">Items listed for more than one audience appear in each matching filter.</p>
     <p id="products-status" role="status" hidden={result.status === 'ready'}>{result.status === 'loading' ? 'Loading finds…' : result.error}</p>
     {result.status === 'error' ? <button className="button" id="retry-products" type="button" onClick={() => setRetry(previous => previous + 1)}>Try loading again</button> : null}
     <div className="product-grid" aria-busy={result.status === 'loading'} hidden={result.status !== 'ready'}>
