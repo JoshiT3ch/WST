@@ -10,7 +10,11 @@ export async function requestApi(path, options = {}) {
     throw new Error('The Finds API is unavailable. Open the website through the Node.js server.');
   }
   const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'Unable to complete your request. Please try again.');
+  if (!response.ok) {
+    const error = new Error(data.error || 'Unable to complete your request. Please try again.');
+    if (data.fieldErrors) error.fieldErrors = data.fieldErrors;
+    throw error;
+  }
   return data;
 }
 

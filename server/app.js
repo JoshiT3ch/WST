@@ -10,6 +10,10 @@ import { fileURLToPath } from 'node:url';
 import multer from 'multer';
 import { createMessageStore } from './message-store.js';
 import { createProductStore } from './product-store.js';
+import {
+  listingAudiences as audiences, listingCategories as productCategories,
+  MAX_IMAGE_SIZE, validateListingFields
+} from '../shared/listing-validation.js';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const publicRoot = resolve(projectRoot, 'finds-static');
@@ -18,11 +22,7 @@ const products = JSON.parse(
   readFileSync(new URL('./data/products.json', import.meta.url), 'utf8')
 );
 
-const audiences = ['Woman', 'Men', 'Kids'];
 const topics = ['buying', 'selling', 'listing', 'account', 'feedback', 'general', 'other'];
-const productCategories = ['Clothing', 'Shoes', 'Accessories', 'Bags', 'Home', 'Kids', 'Other'];
-const productConditions = ['New', 'Like new', 'Good', 'Fair'];
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -50,51 +50,6 @@ function getImageExtension(buffer) {
       buffer.toString('ascii', 8, 12) === 'WEBP') return 'webp';
 
   return null;
-}
-
-function validateProduct(body) {
-  const title = typeof body.title === 'string' ? body.title.trim() : '';
-  const description = typeof body.description === 'string' ? body.description.trim() : '';
-  const category = typeof body.category === 'string' ? body.category : '';
-  const size = typeof body.size === 'string' ? body.size.trim() : '';
-  const condition = typeof body.condition === 'string' ? body.condition : '';
-  const price = typeof body.price === 'string' || typeof body.price === 'number'
-    ? Number(body.price)
-    : Number.NaN;
-
-  const submittedAudiences = Array.isArray(body.audiences)
-    ? body.audiences
-    : typeof body.audiences === 'string'
-      ? [body.audiences]
-      : [];
-
-  const validAudiences =
-    submittedAudiences.length >= 1 &&
-    submittedAudiences.length <= audiences.length &&
-    submittedAudiences.every(value => audiences.includes(value)) &&
-    new Set(submittedAudiences).size === submittedAudiences.length;
-
-  if (
-    !title || title.length > 100 ||
-    description.length < 10 || description.length > 1000 ||
-    !productCategories.includes(category) ||
-    !Number.isFinite(price) || !Number.isInteger(price) ||
-    price < 1 || price > 10000000 ||
-    !size || size.length > 40 ||
-    !productConditions.includes(condition) ||
-    !validAudiences
-  ) {
-    return {
-      error: 'Enter a valid title, description, category, whole-number price, size, condition, and at least one audience.'
-    };
-  }
-
-  return {
-    product: {
-      title, description, category, price, size, condition,
-      audiences: submittedAudiences
-    }
-  };
 }
 
 function checkSameOrigin(req, res, resource) {
@@ -137,7 +92,7 @@ export function createApp({
     contentSecurityPolicy: {
       directives: {
         'upgrade-insecure-requests': null,
-        'img-src': ["'self'", 'data:', 'https:']
+        'img-src': ["'self'", 'data:', 'blob:', 'https:']
       }
     },
     strictTransportSecurity: false
@@ -150,25 +105,15 @@ export function createApp({
 
   app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
- app.get('/api/products', async (req, res, next) => {
-  const {
-    q = '',
-    audience = 'All',
-    category = 'All'
-  } = req.query;
-
-  if (
-    typeof q !== 'string' ||
-    q.length > 100 ||
-    typeof audience !== 'string' ||
-    !['All', ...audiences].includes(audience) ||
-    typeof category !== 'string' ||
-    !['All', ...productCategories].includes(category)
-  ) {
-    return res.status(400).json({
-      error: 'Use a search of at most 100 characters and valid audience and category filters.'
-    });
-  }
+  app.get('/api/products', async (req, res, next) => {
+    const { q = '', audience = 'All', category = 'All' } = req.query;
+    if (typeof q !== 'string' || q.length > 100 ||
+        typeof audience !== 'string' || !['All', ...audiences].includes(audience) ||
+        typeof category !== 'string' || !['All', ...productCategories].includes(category)) {
+      return res.status(400).json({
+        error: 'Use a search of at most 100 characters and valid audience and category filters.'
+      });
+    }
 
     try {
       const allProducts = [...products, ...await listings.list()];
@@ -179,11 +124,9 @@ export function createApp({
           product.size, product.condition, ...(product.audiences || [])
         ].join(' ').toLowerCase();
 
-      return (
-  (audience === 'All' || product.audiences.includes(audience)) &&
-  (category === 'All' || product.category === category) &&
-  terms.every(term => text.includes(term))
-);
+        return (audience === 'All' || product.audiences.includes(audience)) &&
+          (category === 'All' || product.category === category) &&
+          terms.every(term => text.includes(term));
       });
 
       res.json({ products: results, total: results.length });
@@ -214,9 +157,12 @@ export function createApp({
         return res.status(400).json({ error: 'Please upload a photo of your item.' });
       }
 
-      const validation = validateProduct(req.body);
-      if (validation.error) {
-        return res.status(400).json({ error: validation.error });
+      const validation = validateListingFields(req.body);
+      if (Object.keys(validation.fieldErrors).length) {
+        return res.status(400).json({
+          error: 'Check the highlighted fields before listing your item on Finds.',
+          fieldErrors: validation.fieldErrors
+        });
       }
 
       const extension = getImageExtension(req.file.buffer);

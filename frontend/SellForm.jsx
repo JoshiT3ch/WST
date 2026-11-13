@@ -1,95 +1,139 @@
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { requestApi, errorMessage } from './api.js';
 import { ArrowIcon, CheckIcon } from './ui.jsx';
+import {
+  listingCategories as categories, listingConditions as conditions, listingAudiences as audiences,
+  MAX_IMAGE_SIZE, itemNameError, validateListingFields
+} from '../shared/listing-validation.js';
 
-const categories = ['Clothing', 'Shoes', 'Accessories', 'Bags', 'Home', 'Kids', 'Other'];
-const conditions = ['New', 'Like new', 'Good', 'Fair'];
-const audiences = ['Woman', 'Men', 'Kids'];
+function imageError(file) {
+  if (!file?.size) return 'Upload a photo of your item for your Finds listing.';
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return 'Choose a JPG, PNG, or WebP photo.';
+  if (file.size > MAX_IMAGE_SIZE) return 'Choose a photo smaller than or equal to 5 MB.';
+  return '';
+}
+
+function FieldError({ name, errors }) {
+  return errors[name] ? <p className="field-error" id={`listing-${name}-error`}>{errors[name]}</p> : null;
+}
 
 export function SellForm() {
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
   const [created, setCreated] = useState(null);
-  const [busy, setBusy] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const pending = useRef(null);
+  const successPanel = useRef(null);
+  const errorPanel = useRef(null);
+  const busy = status === 'sending';
+  const formError = error || (status === 'error' && Object.keys(fieldErrors).length
+    ? 'Check the highlighted fields before listing your item on Finds.' : '');
+
+  useEffect(() => () => pending.current?.abort(), []);
+  useEffect(() => {
+    if (status === 'success') successPanel.current?.focus();
+  }, [status]);
+  useEffect(() => {
+    if (!selectedImage) {
+      setImagePreview('');
+      return;
+    }
+    const url = URL.createObjectURL(selectedImage);
+    setImagePreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [selectedImage]);
+
+  function validationProps(name, helpId) {
+    return {
+      'aria-invalid': fieldErrors[name] ? true : undefined,
+      'aria-describedby': [helpId, fieldErrors[name] ? `listing-${name}-error` : ''].filter(Boolean).join(' ') || undefined
+    };
+  }
+
+  function updateFieldError(name, message = '') {
+    setFieldErrors(previous => {
+      const next = { ...previous };
+      if (message) next[name] = message;
+      else delete next[name];
+      return next;
+    });
+  }
 
   function handleImageChange(event) {
     const file = event.target.files?.[0];
+    const message = imageError(file);
+    updateFieldError('image', message);
+    setSelectedImage(message ? null : file);
+  }
 
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-
-    setImagePreview(file ? URL.createObjectURL(file) : '');
+  function handleChange(event) {
+    const { name, value } = event.target;
+    if (name === 'image') return;
+    if (fieldErrors[name]) updateFieldError(name, name === 'title' ? itemNameError(value) : '');
   }
 
   async function submit(event) {
     event.preventDefault();
 
-    if (busy) return;
-
-    setBusy(true);
-    setStatus('sending');
-    setError('');
+    if (pending.current) return;
 
     const form = event.currentTarget;
     const data = new FormData(form);
-    const selectedImage = data.get('image');
-    const selectedAudiences = data.getAll('audiences');
+    const validation = validateListingFields({ ...Object.fromEntries(data), audiences: data.getAll('audiences') });
+    const errors = { ...validation.fieldErrors };
+    const photoError = imageError(data.get('image'));
+    if (photoError) errors.image = photoError;
+    setFieldErrors(errors);
 
-    if (!selectedAudiences.length) {
+    if (Object.keys(errors).length) {
       setStatus('error');
-      setError('Choose at least one audience for your listing.');
-      setBusy(false);
+      setError('');
+      requestAnimationFrame(() => form.querySelector('input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"]')?.focus());
       return;
     }
 
-    if (!(selectedImage instanceof File) || selectedImage.size === 0) {
-      setStatus('error');
-      setError('Please upload a photo of your item.');
-      setBusy(false);
-      return;
-    }
-
+    const controller = new AbortController();
+    pending.current = controller;
+    setStatus('sending');
+    setError('');
     try {
       const result = await requestApi('/api/products', {
         method: 'POST',
-        body: data
+        body: data,
+        signal: controller.signal
       });
-
+      if (controller.signal.aborted) return;
       setCreated(result.product);
       setStatus('success');
       form.reset();
-
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
-
-      setImagePreview('');
+      setSelectedImage(null);
     } catch (requestError) {
+      if (controller.signal.aborted) return;
       setStatus('error');
-      setError(errorMessage(requestError));
+      setError(requestError.fieldErrors ? '' : errorMessage(requestError));
+      setFieldErrors(requestError.fieldErrors || {});
+      requestAnimationFrame(() => errorPanel.current?.focus());
     } finally {
-      setBusy(false);
+      pending.current = null;
     }
   }
 
   function resetForm() {
     setCreated(null);
     setError('');
+    setFieldErrors({});
     setStatus('idle');
-
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-
-    setImagePreview('');
+    setSelectedImage(null);
+    requestAnimationFrame(() => document.querySelector('#listing-title')?.focus());
   }
 
   if (status === 'success' && created) {
     return (
       <section
+        ref={successPanel}
         className="contact-form-panel form-success sell-success-compact"
         aria-live="polite"
         tabIndex="-1"
@@ -134,7 +178,11 @@ export function SellForm() {
     <form
       className="contact-form-panel sell-form"
       onSubmit={submit}
+      onChange={handleChange}
+      noValidate
+      aria-busy={busy}
       aria-labelledby="sell-form-title"
+      aria-describedby="form-note"
     >
       <p className="eyebrow">YOUR NEXT CHAPTER STARTS HERE</p>
       <h2 id="sell-form-title">List an item</h2>
@@ -144,9 +192,9 @@ export function SellForm() {
         Fields marked * are required.
       </p>
 
-      {status === 'error' && (
-        <p className="sell-error" role="alert">
-          {error}
+      {formError && (
+        <p ref={errorPanel} className="sell-error" role="alert" tabIndex={-1}>
+          {formError}
         </p>
       )}
 
@@ -158,9 +206,13 @@ export function SellForm() {
           required
           minLength="1"
           maxLength="100"
+          {...validationProps('title', 'listing-title-help')}
+          onBlur={event => updateFieldError('title', itemNameError(event.target.value))}
           placeholder="e.g. Vintage denim jacket"
           disabled={busy}
         />
+        <p className="field-help" id="listing-title-help">Letters and spaces only, up to 100 characters.</p>
+        <FieldError name="title" errors={fieldErrors} />
       </div>
 
       <div className="form-row">
@@ -171,6 +223,7 @@ export function SellForm() {
             name="category"
             required
             defaultValue=""
+            {...validationProps('category')}
             disabled={busy}
           >
             <option value="" disabled>Select a category</option>
@@ -180,6 +233,7 @@ export function SellForm() {
               </option>
             ))}
           </select>
+          <FieldError name="category" errors={fieldErrors} />
         </div>
 
         <div className="field">
@@ -193,8 +247,10 @@ export function SellForm() {
             step="1"
             required
             placeholder="e.g. 650"
+            {...validationProps('price')}
             disabled={busy}
           />
+          <FieldError name="price" errors={fieldErrors} />
         </div>
       </div>
 
@@ -207,8 +263,10 @@ export function SellForm() {
             required
             maxLength="40"
             placeholder="e.g. Medium, EU 38, One size"
+            {...validationProps('size')}
             disabled={busy}
           />
+          <FieldError name="size" errors={fieldErrors} />
         </div>
 
         <div className="field">
@@ -218,6 +276,7 @@ export function SellForm() {
             name="condition"
             required
             defaultValue=""
+            {...validationProps('condition')}
             disabled={busy}
           >
             <option value="" disabled>Select condition</option>
@@ -227,27 +286,29 @@ export function SellForm() {
               </option>
             ))}
           </select>
+          <FieldError name="condition" errors={fieldErrors} />
         </div>
       </div>
 
-      <fieldset className="field audience-field" disabled={busy}>
+      <fieldset className="field audience-field" disabled={busy} {...validationProps('audiences', 'listing-audiences-help')}>
         <legend>Who is this item for? *</legend>
 
         <div className="audience-options">
-          {audiences.map((value, index) => (
+          {audiences.map(value => (
             <label key={value}>
               <input
                 type="checkbox"
                 name="audiences"
                 value={value}
-                defaultChecked={index < 2}
+                {...validationProps('audiences', 'listing-audiences-help')}
               />{' '}
               {value}
             </label>
           ))}
         </div>
 
-        <p className="field-help">Select at least one audience.</p>
+        <p className="field-help" id="listing-audiences-help">Choose who the item is for. Select multiple audiences only if it suits each one.</p>
+        <FieldError name="audiences" errors={fieldErrors} />
       </fieldset>
 
       <div className="field">
@@ -260,10 +321,12 @@ export function SellForm() {
           maxLength="1000"
           rows="5"
           placeholder="Describe the item, fit, material, or anything buyers should know."
+          {...validationProps('description', 'listing-description-help')}
           disabled={busy}
         />
 
-        <p className="field-help">10–1,000 characters.</p>
+        <p className="field-help" id="listing-description-help">10–1,000 characters.</p>
+        <FieldError name="description" errors={fieldErrors} />
       </div>
 
       <div className="field">
@@ -275,12 +338,14 @@ export function SellForm() {
           accept="image/jpeg,image/png,image/webp"
           required
           onChange={handleImageChange}
+          {...validationProps('image', 'listing-image-help')}
           disabled={busy}
         />
 
-        <p className="field-help">
+        <p className="field-help" id="listing-image-help">
           Upload a JPG, PNG, or WebP image. Maximum file size: 5 MB.
         </p>
+        <FieldError name="image" errors={fieldErrors} />
 
         {imagePreview && (
           <div className="sell-image-preview">
